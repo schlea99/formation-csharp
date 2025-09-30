@@ -11,19 +11,24 @@ namespace exercice
     {
         public static int SumTab(int[] tab)
         {
+            // Renvoi de la valeur -1 si résultat indéfini
             if (tab == null)
             {
                 return -1;
             }
-
-            int somme = 0;
-
-            Console.WriteLine("Somme des éléments d'un tableau :");
-            Console.WriteLine("tab : ");
-            Console.WriteLine("Somme :")
-                return somme;
-
-            
+            else
+            {
+                // Calcul de la somme
+                int somme = 0;
+                for (int i = 0; i < tab.Length; i++)
+                {
+                    somme += tab[i];
+                }
+                Console.WriteLine("Somme des éléments d'un tableau :");
+                Console.WriteLine($"tab : {}");
+                Console.WriteLine($"Somme : {somme}");
+                return somme; 
+            }  
         }
 
         public static int[] OpeTab(int[] tab, char ope, int b)

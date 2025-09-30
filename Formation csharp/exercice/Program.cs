@@ -10,8 +10,7 @@ namespace exercice
     {
         static void Main(string[] args)
         {
-            Pyramid.PyramidConstruction(10, false);
-            Pyramid.PyramidConstruction(20, true);
+            TasksTables.SumTab(new int[] { 1, 10, 20, 5 });     
             Console.ReadKey();
         }
     }
