@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Serie1\Ex1_ElementaryOperations.cs" />
+    <Compile Include="Serie2\Ex1_TasksTables.cs" />
+    <Compile Include="Serie2\Ex2_Morpion.cs" />
+    <Compile Include="Serie1\Ex2_SpeakingClock.cs" />
+    <Compile Include="Serie1\Ex3_Pyramid.cs" />
+    <Compile Include="Serie2\Ex3_Search.cs" />
+    <Compile Include="Serie1\Ex4_Factorial.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

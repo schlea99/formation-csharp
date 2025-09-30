@@ -10,6 +10,10 @@ namespace exercice
     {
         static void Main(string[] args)
         {
+            Pyramid.PyramidConstruction(10, false);
+            Pyramid.PyramidConstruction(20, true);
+            Console.ReadKey();
         }
     }
 }
+
