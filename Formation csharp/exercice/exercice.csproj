@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Serie3\Ex1_AdministrativeTasks.cs" />
+    <Compile Include="Serie3\Ex2_CesarCode.cs" />
+    <Compile Include="Serie3\Ex3_MorseCode.cs" />
     <Compile Include="Serie1\Ex1_ElementaryOperations.cs" />
     <Compile Include="Serie2\Ex1_TasksTables.cs" />
     <Compile Include="Serie2\Ex2_Morpion.cs" />
