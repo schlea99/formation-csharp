@@ -75,15 +75,15 @@ namespace exercice
             // Code de départ
             Console.WriteLine($"Code : {line}");
 
-            for (int i = 0; i < _cesarTable.GetLength(0); i++)
+            for (int j = 0; j < _cesarTable.GetLength(1); j++)
             {
-                char r = _cesarTable[0, i];
-
+                char r = _cesarTable[0, j];
+                
                 foreach (char c in line)
                 {
                     if (r == c)
                     {
-                        StrB.Replace(c, _cesarTable[1, i]);
+                        StrB.Replace(c, _cesarTable[1, j]);
                     }
                 }
             }

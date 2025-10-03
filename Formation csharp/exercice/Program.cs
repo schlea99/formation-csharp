@@ -52,6 +52,8 @@ namespace exercice
 
             Cesar r = new Cesar();
             r.CesarCode("A B C");
+            r.DecryptCesarCode("D E F");
+
             Console.ReadKey();
 
         }
