@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Bataille_Navale
 {
-    internal class Bateau
+    public class Bateau
     {
         public string Nom { get; private set; }
         public int Taille { get; private set; }
@@ -23,13 +23,30 @@ namespace Bataille_Navale
         /// <param name="y"></param>
         public void Touché(int x, int y)
         {
+            // On passe à l'état Touché la case si elle est présente
+            for (int i = 0; i < Positions.Count; i++)
+            {
+                if (Positions[i].X == x && Positions[i].Y == y)
+                {
+                    Positions[i].Touché();
+                }
+            }
 
+            // Sécurité - passer à l'état Coulé les cases si toutes les cases sont "Touchées"
+            if (EstCoulé())
+            {
+                for (int i = 0; i < Positions.Count; i++)
+                {
+                    Positions[i].Coulé();
+                }
+            }
 
+            // ??
+            /*
             if()
             {
                 Positions.RemoveAt(2);
-                
-            }
+            }*/
 
 
         }
@@ -39,9 +56,23 @@ namespace Bataille_Navale
         /// </summary>
         public bool EstCoulé()
         {
-
-            return false;
+            foreach (Position position in Positions)
+            {
+                if (position.Statut != Position.Etat.Touché && position.Statut != Position.Etat.Coulé)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
+
+        /// <summary>
+        /// Renvoie la position si celle-ci appartient au Bateau
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public Position Cible(int x, int y) => Positions.Find(p => p.X == x && p.Y == y);
 
     }
 }

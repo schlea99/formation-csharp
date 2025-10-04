@@ -40,8 +40,42 @@ namespace Bataille_Navale
 
         public void LancementPartie()
         {
+            // Pourquoi avoir supprimé le code fourni ??
+            //int cpt = 0;
+            //while (!FindePartie())
+
             int cpt = 0;
             while (!FindePartie())
+            {
+                Console.Clear();
+                AfficherPlateau();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("Quelle case visez-vous : (format: ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("ligne");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(",");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("colonne");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(")");
+                Console.WriteLine();
+
+                string val = Console.ReadLine();
+                string[] position = val.Split(',', '.');
+
+                if (int.TryParse(position[0], out int pos1) && position.Length == 2 && int.TryParse(position[1], out int pos2) && pos1 >= 1 && pos1 <= 10 && pos2 >= 1 && pos2 <= 10)
+                {
+                    cpt++;
+                    Viser(pos1 - 1, pos2 - 1);
+                }
+            }
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Clear();
+            AfficherPlateau();
+            Console.Write($"GG {cpt} coups effectués !");
         }
 
         /// <summary>
@@ -54,6 +88,7 @@ namespace Bataille_Navale
         /// <returns></returns>
         /// 
 
+        // On corrigera cette partie tous ensemble
         private bool PlacerBateau(int x, int y, int taille, bool estVertical)
         {
             // Pour le placement aléatoire des bateaux
@@ -65,36 +100,38 @@ namespace Bataille_Navale
                 bool place = false;
                 while (!place)
                 {
+                    // x, y et estvertical fournis en paramètres, pas besoin ici de les demander.
                     x = rand.Next(10);
                     y = rand.Next(10);
                     bool estvertical = (rand.Next(2) == 0);
 
-                    if (estvertical is true)
+                    if (estVertical)
                     {
+                        // Il y a de l'idée, mais tu pourrais le faire avant. 
                         if (x + b.Taille < 10)
                         {
                             for (int i = x; i < x + b.Taille; i++)
                             {
-                                if ((x, y) != Etat.Caché)
+                                /*if ((x, y) != Etat.Caché)
                                 {
                                     return false;
-                                }
+                                }*/
                             }
 
                         }
                     }
 
 
-                    if (estVertical is false)
+                    if (!estVertical)
                     {
                         if (y + b.Taille < 10)
                         {
                             for (int j = y; j < y + b.Taille; j++)
                             {
-                                if (b.Positions != Position.Etat.Caché)
+                                /*if (b.Positions != Position.Etat.Caché)
                                 {
                                     return false;
-                                }
+                                }*/
                             }
                         }
                     }
@@ -105,7 +142,9 @@ namespace Bataille_Navale
                     }
                 }
                 Console.WriteLine($"Le bateau {b.Nom} de taille {b.Taille} est correctement placé à la position {b.Positions} !");
+
             }
+            return false;
         }
 
 
@@ -120,22 +159,28 @@ namespace Bataille_Navale
         {
             foreach (Bateau b in Bateaux)
             {
-                foreach (Position in b.Positions)
+                // Appel méthode de bateau
+                b.Touché(x, y);
+
+                if (b.Cible(x,y) == null)
+                {
+                    // Dans le vide
+                    PlateauJeu[x, y].Plouf();
+                }
+
+                foreach (Position p in b.Positions)
                 {
                     bool touché = false;
 
                     while (!touché)
                     {
-                        // Choisir la position visée
+                        // Pourquoi demander la position à l'utilisateur ???
+                        // Choisir la position visée - x et y sont fournis
                         Console.Write("Entrez une position X entre 0 et 10 :");
                         x = int.Parse(Console.ReadLine());
                         Console.Write("Entrez une position Y entre 0 et 10 :");
                         y = int.Parse(Console.ReadLine());
 
-                        if (Position(x,y) = b.Positions)
-                        {
-
-                        }
 
 
                     }
