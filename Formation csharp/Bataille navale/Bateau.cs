@@ -56,14 +56,23 @@ namespace Bataille_Navale
         /// </summary>
         public bool EstCoulé()
         {
+            int count =0;
             foreach (Position position in Positions)
             {
                 if (position.Statut != Position.Etat.Touché && position.Statut != Position.Etat.Coulé)
                 {
-                    return false;
+                    count++;             
                 }
             }
-            return true;
+           
+            if (count == Taille)
+            {
+                return true;
+            }
+            else 
+            {
+                 return true;
+            }
         }
 
         /// <summary>
