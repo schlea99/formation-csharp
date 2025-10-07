@@ -10,17 +10,15 @@ namespace Projet_argent
     {
         public int NumeroTransaction { get; set; }
         public DateTime Horodatage { get; set; }
-        public decimal Montant { get; set; }
-        public string Type { get; set; }
+        public decimal Montant { get; set; }      
         public int IdExpediteur { get; set; }
         public int IdDestinataire { get; set; }
 
-        public Transactions (int numerotransaction, DateTime horodatage, decimal montant, string type, int idexpediteur, int iddestinataire )
+        public Transactions(int numerotransaction, DateTime horodatage, decimal montant, int idexpediteur, int iddestinataire )
         {
             NumeroTransaction = numerotransaction;
             Horodatage = horodatage;
-            Montant = montant;
-            Type = type;
+            Montant = montant;        
             IdExpediteur = idexpediteur;
             IdDestinataire = iddestinataire; 
         }

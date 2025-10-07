@@ -9,7 +9,7 @@ namespace Projet_argent
     public class Compte_bancaire
     {
         public int Identifiant { get; private set; }
-        public decimal Solde { get; private set; }
+        public decimal Solde { get; private set; } // financier ou scientifique en décimal
         public string Type { get; private set; }
         public string Numerocarte { get; private set; }
 
@@ -74,7 +74,7 @@ namespace Projet_argent
             }
         }
 
-        public bool Prelevement_compte(Compte_bancaire expediteur, decimal montant)
+        /*public bool Prelevement_compte(Compte_bancaire expediteur, decimal montant)
         {
             if (expediteur == null)
             {
@@ -92,7 +92,8 @@ namespace Projet_argent
             {
                 Solde += montant;
                 expediteur.Solde -= montant;
-                return true;
+                return true;*/
+
             }          
         }
     }

@@ -11,7 +11,7 @@ namespace Projet_argent
         public string Numerocarte { get; set; }
         public int Plafond { get; set; }
 
-        public List<(DateTime horodatage, int numtransaction,decimal montant,string type)> Historique { get; set; } = new List<(DateTime, int, decimal,string)>();
+        public List<(DateTime horodatage, int numtransaction,decimal montant)> Historique { get; set; } = new List<(DateTime, int, decimal)>();
 
         public List<int> ComptesAssocies { get; set; } = new List<int>();
 
@@ -21,12 +21,12 @@ namespace Projet_argent
             Plafond = plafond;
         }
 
-        public void AjouterHistorique (DateTime horodatage, int numtransaction, decimal montant, string type)
+        public void AjouterHistorique(DateTime horodatage, int numtransaction, decimal montant)
         {
-            Historique.Add((horodatage, numtransaction, montant, type));
+            Historique.Add((horodatage, numtransaction, montant));
         }
 
-        public void ListeComptesAssocies (int identifiant)
+        public void ListeComptesAssocies(int identifiant)
         {
             ComptesAssocies.Add(identifiant);
         }
@@ -46,7 +46,6 @@ namespace Projet_argent
             }
             return somme;
         }
-
 
 
 
