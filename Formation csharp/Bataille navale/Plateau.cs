@@ -36,6 +36,22 @@ namespace Bataille_Navale
                     PlateauJeu[x, y] = new Position(x, y);
                 }
             }
+            Random r = new Random();
+
+            for (int i=0;i<Bateaux.count();i++)
+            {
+                bateauxPlace = false;
+                while(!bateauPlace)
+                {
+                    x = r.Next(0,10)
+                   y = 
+                        .....
+
+
+                        if(StatutPlacement)
+                        {
+                            for j=0;j<Bateau[i];i++)
+                            { ....
         }
 
         public void LancementPartie()
@@ -91,6 +107,37 @@ namespace Bataille_Navale
         // On corrigera cette partie tous ensemble
         private bool PlacerBateau(int x, int y, int taille, bool estVertical)
         {
+            // corrections 
+            // Test par rapport aux bords
+            if (estVertical && 10-x < taille)
+            {
+                return false
+            }       
+            if (!estVertical && 10-y < taille)
+            {
+                return false
+            }        
+
+            // Tests par rapport aux autres bateaux 
+            //
+            for (int j = -1; j<=taille; j++)
+            {
+                if (estVertical) 
+                { 
+                    ....
+                }
+                 else 
+                 {
+                     foreach(var bateau in Bateaux)
+                     {
+                         foreach(var item in bateau.Positions)
+                         {
+                             if((pos.X == x && pos.Y == y+j || (pos.X == x-1 && pos.Y == y+j) || ((pos.X == x+1 && pos.Y == y+j))
+                                {
+                                    return false
+                                }
+
+            
             // Pour le placement aléatoire des bateaux
             Random rand = new Random();
 
