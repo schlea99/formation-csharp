@@ -14,7 +14,8 @@
             Y = y;
             Statut = Etat.Caché;
         }
-
+		
+        // Modifie la l'état lorsqu'on appelle la méthode
         public void Touché() 
 		{
             Statut = Etat.Touché;
