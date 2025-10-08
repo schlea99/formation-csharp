@@ -13,14 +13,16 @@ namespace Projet_argent
         public decimal Montant { get; set; }      
         public int IdExpediteur { get; set; }
         public int IdDestinataire { get; set; }
+        public string Statut { get; set; }
 
-        public Transactions(int numerotransaction, DateTime horodatage, decimal montant, int idexpediteur, int iddestinataire )
+        public Transactions(int numerotransaction, DateTime horodatage, decimal montant, int idexpediteur, int iddestinataire, string statut)
         {
             NumeroTransaction = numerotransaction;
             Horodatage = horodatage;
             Montant = montant;        
             IdExpediteur = idexpediteur;
-            IdDestinataire = iddestinataire; 
+            IdDestinataire = iddestinataire;
+            Statut = statut;
         }
 
 

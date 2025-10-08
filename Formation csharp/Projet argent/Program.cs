@@ -25,7 +25,12 @@ namespace Projet_argent
 
         static void Main(string[] args)
         {
-            Banque.Traiterlestarnsactions(); 
+            Banque banque = new Banque();
+            banque.AccepterDonneesFichiers();
+            banque.AssocierComptecarte();
+            banque.TraiterTransactions();
+            Ecriture_fichier.EcrireTransaction(@"C:\Users\Formation\Desktop\Sortie.csv", banque.Transactions);
+            Console.ReadKey();
         }
     }
 }

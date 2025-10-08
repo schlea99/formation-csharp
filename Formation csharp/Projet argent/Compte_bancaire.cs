@@ -43,7 +43,7 @@ namespace Projet_argent
             }
             if (Solde < montant)
             {
-                return false; 
+                return false;
             }
             else
             {
@@ -74,27 +74,27 @@ namespace Projet_argent
             }
         }
 
-        /*public bool Prelevement_compte(Compte_bancaire expediteur, decimal montant)
-        {
-            if (expediteur == null)
-            {
-                return false;
-            }
-            if (montant <= 0)
-            {
-                return false;
-            }
-            if (expediteur.Solde < montant)
-            {
-                return false;
-            }
-            else
-            {
-                Solde += montant;
-                expediteur.Solde -= montant;
-                return true;*/
+        /*  public bool Prelevement_compte(Compte_bancaire expediteur, decimal montant)
+          {
+              if (expediteur == null)
+              {
+                  return false;
+              }
+              if (montant <= 0)
+              {
+                  return false;
+              }
+              if (expediteur.Solde < montant)
+              {
+                  return false;
+              }
+              else
+              {
+                  Solde += montant;
+                  expediteur.Solde -= montant;
+                  return true;
 
-            }          
-        }
+              }
+            }*/
     }
 }

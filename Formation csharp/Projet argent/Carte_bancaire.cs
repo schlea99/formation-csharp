@@ -8,10 +8,10 @@ namespace Projet_argent
 {
     public class Carte_bancaire
     {
-        public string Numerocarte { get; set; }
-        public int Plafond { get; set; }
+        public string Numerocarte { get; private set; }
+        public int Plafond { get; private set; }
 
-        public List<(DateTime horodatage, int numtransaction,decimal montant)> Historique { get; set; } = new List<(DateTime, int, decimal)>();
+        public List<Transactions> Historique { get; set; } = new List<Transactions>();
 
         public List<int> ComptesAssocies { get; set; } = new List<int>();
 
@@ -21,9 +21,9 @@ namespace Projet_argent
             Plafond = plafond;
         }
 
-        public void AjouterHistorique(DateTime horodatage, int numtransaction, decimal montant)
-        {
-            Historique.Add((horodatage, numtransaction, montant));
+        public void AjouterHistorique(Transactions historiquetransac) 
+        {          
+            Historique.Add(historiquetransac);     
         }
 
         public void ListeComptesAssocies(int identifiant)
@@ -39,13 +39,14 @@ namespace Projet_argent
 
             foreach (var num in Historique)
             {
-                if (num.horodatage >= debutcomptage && num.horodatage <= horodatage)
+                if (num.Horodatage >= debutcomptage && num.Horodatage <= horodatage && num.IdExpediteur != 0 && !ComptesAssocies.Contains(num.IdDestinataire))
                 {
-                    somme += num.montant;
+                    somme += num.Montant;
                 }
             }
             return somme;
         }
+
 
 
 

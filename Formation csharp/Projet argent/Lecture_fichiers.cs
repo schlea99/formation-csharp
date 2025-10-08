@@ -22,7 +22,7 @@ namespace Projet_argent
             {
                 // Console.WriteLine(rcompte.ReadLine());
                 string line = rcompte.ReadLine();
-
+                 
                 // Liste pour les identifiants déjà utilisés
                 List<int> Id_Use = new List<int>();
 
@@ -35,7 +35,7 @@ namespace Projet_argent
 
                     if (successid)
                     {
-                        Console.WriteLine($"Conversion {champs[0]} en {identifiant}");
+                        //Console.WriteLine($"Conversion {champs[0]} en {identifiant}");
                         successid = true;
                     }
                     else
@@ -50,7 +50,7 @@ namespace Projet_argent
 
                     if (successSolde)
                     {
-                        Console.WriteLine($"Conversion {champs[3]} en {solde}");
+                        //Console.WriteLine($"Conversion {champs[3]} en {solde}");
                         successSolde = true;
                     }
                     else
@@ -80,10 +80,10 @@ namespace Projet_argent
                     else
                     {
                         continue;
-                    }
-
-                    line = rcompte.ReadLine();
+                    }    
+                    line = rcompte.ReadLine();              
                 }
+                
             }
 
             return ComptesBancaires;
@@ -120,7 +120,7 @@ namespace Projet_argent
 
                     if (successPlafond)
                     {
-                        Console.WriteLine($"Conversion {champs[1]} en {plafond}");
+                        //Console.WriteLine($"Conversion {champs[1]} en {plafond}");
                         successPlafond = true;
                     }
                     else
@@ -146,8 +146,9 @@ namespace Projet_argent
                         continue;
                     }
 
-                    line = rcarte.ReadLine();
+                     line = rcarte.ReadLine();
                 }
+               
             }
             return CartesBancaires;
         }
@@ -168,17 +169,19 @@ namespace Projet_argent
                 // Liste pour les numéros de transaction déjà utilisés
                 List<int> Transac_Use = new List<int>();
 
+                
+
                 while (line != null)
                 {
                     var champs = line.Split(';');
-
+                    string statut = "KO";
                     // déclaration numéro transaction 
 
                     bool successnum = int.TryParse(champs[0], out int numerotransaction);
 
                     if (successnum)
                     {
-                        Console.WriteLine($"Conversion {champs[0]} en {numerotransaction}");
+                        //Console.WriteLine($"Conversion {champs[0]} en {numerotransaction}");
                         successnum = true;
                     }
                     else
@@ -188,11 +191,11 @@ namespace Projet_argent
 
                     // déclaration date de transaction
 
-                    bool successdate = DateTime.TryParseExact(champs[1], "DD/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime horodatage);
+                    bool successdate = DateTime.TryParseExact(champs[1], "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime horodatage);
 
                     if (successdate)
                     {
-                        Console.WriteLine($"Conversion {champs[1]} en {horodatage}");
+                        //Console.WriteLine($"Conversion {champs[1]} en {horodatage}");
                         successdate = true;
                     }
                     else
@@ -206,7 +209,7 @@ namespace Projet_argent
 
                     if (successMontant)
                     {
-                        Console.WriteLine($"Conversion {champs[2]} en {montant}");
+                        //Console.WriteLine($"Conversion {champs[2]} en {montant}");
                         successMontant = true;
                     }
                     else
@@ -220,7 +223,7 @@ namespace Projet_argent
 
                     if (successexp)
                     {
-                        Console.WriteLine($"Conversion {champs[3]} en {idexpediteur}");
+                        //Console.WriteLine($"Conversion {champs[3]} en {idexpediteur}");
                         successexp = true;
                     }
                     else
@@ -234,7 +237,7 @@ namespace Projet_argent
 
                     if (successdes)
                     {
-                        Console.WriteLine($"Conversion {champs[4]} en {iddestinataire}");
+                        //Console.WriteLine($"Conversion {champs[4]} en {iddestinataire}");
                         successdes = true;
                     }
                     else
@@ -244,13 +247,13 @@ namespace Projet_argent
 
                     // vérification du format des champs
 
-                    if (numerotransaction >= 0 && Transac_Use.Contains(numerotransaction))
+                    if (numerotransaction >= 0 && !Transac_Use.Contains(numerotransaction))
                     {
                         if (iddestinataire >= 0 && idexpediteur >= 0)
                         {
                             if (montant >= 0)
                             {
-                                Transactions.Add(new Transactions(numerotransaction, horodatage, montant, idexpediteur, iddestinataire));
+                                Transactions.Add(new Transactions(numerotransaction, horodatage, montant, idexpediteur, iddestinataire, statut));
                                 Transac_Use.Add(numerotransaction);
                             }                                 
                         }

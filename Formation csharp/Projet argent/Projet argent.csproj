@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Carte_bancaire.cs" />
     <Compile Include="Banque.cs" />
-    <Compile Include="Carte_bancaireBase.cs" />
     <Compile Include="Ecriture_fichier.cs" />
     <Compile Include="Lecture_fichiers.cs" />
     <Compile Include="Transactions.cs" />
