@@ -15,7 +15,7 @@ namespace Or.Pages
         {
             InitializeComponent();
             Carte c = SqlRequests.InfosCarte(numCarte);
-            
+
             Numero.Text = c.Id.ToString();
             Prenom.Text = c.PrenomClient;
             Nom.Text = c.NomClient;
@@ -46,6 +46,29 @@ namespace Or.Pages
         {
             PageFunctionNavigate(new Depot(long.Parse(Numero.Text)));
         }
+
+        // Projet or - partie 3 - bénéficiaire
+        private void GoBeneficiaire(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+
+        // Projet or - partie 2 : export xml
+        private void ExportXML(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SerialisationXML.SerialiserComptesTransaction(@"C:\Users\Formation\Desktop\ExportXML.xml", long.Parse(Numero.Text));
+                MessageBox.Show("Export XML ok");
+            }
+            catch
+            {
+                MessageBox.Show("Export XML non executé");
+            }
+
+        }
+
 
         void PageFunctionNavigate(PageFunction<long> page)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Or.Business;
+using System;
 
 namespace Or.Models
 {
@@ -10,6 +11,9 @@ namespace Or.Models
         public int Expediteur { get; set; }
         public int Destinataire { get; set; }
 
+        // Projet Or - Partie 1 Ajouter le type de transaction
+        public Operation Operation { get; set; }
+
         public Transaction(int idTransaction, DateTime horodatage, decimal montant, int expediteur, int destinataire)
         {
             IdTransaction = idTransaction;
@@ -17,6 +21,8 @@ namespace Or.Models
             Montant = montant;
             Expediteur = expediteur;
             Destinataire = destinataire;
+            Operation = Tools.TypeTransaction(expediteur, destinataire);
         }
+
     }
 }

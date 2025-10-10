@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Navigation;
+using static Or.Business.MessagesErreur;
 
 namespace Or.Pages
 {
@@ -19,17 +20,26 @@ namespace Or.Pages
         Compte ComptePorteur { get; set; }
         public Retrait(long numCarte)
         {
+            // Charge la page retrait.xaml
             InitializeComponent();
+            // Initialise la saisie du montant à 0e
             Montant.Text = 0M.ToString("C2");
 
+            // Récupère les infos Carte
             CartePorteur = SqlRequests.InfosCarte(numCarte);
+            // Récupère la liste des comptes associés à la carte, et trouve le compte courant (utilisé pour le retrait)
             ComptePorteur = SqlRequests.ListeComptesAssociesCarte(CartePorteur.Id).Find(x => x.TypeDuCompte == TypeCompte.Courant);
+            // Récupère les transactions effectuées avec la carte
             List<Transaction> transac = SqlRequests.ListeTransactionsAssociesCarte(numCarte);
             List<int> cpts = SqlRequests.ListeComptesAssociesCarte(numCarte).Select(x => x.Id).ToList();
+            // Appel méthode pour alimenter l'historique et la liste des comptes associés à la carte
             CartePorteur.AlimenterHistoriqueEtListeComptes(transac, cpts);
 
+            // Affichage du plafond max
             PlafondMaxRetrait.Text = CartePorteur.Plafond.ToString("C2");
-            PlafondRetraitActualise.Text = ; 
+            // Affichage du plafond actualisé (projet or - partie 1)
+            PlafondRetraitActualise.Text = CartePorteur.SoldeCarteActuel(DateTime.Now, CartePorteur.Id).ToString("C2");
+            // Affichage du solde 
             Solde.Text = ComptePorteur.Solde.ToString("C2");
         }
 
@@ -45,8 +55,9 @@ namespace Or.Pages
                 //Compte fictif pour permettre la transaction
                 Compte compteBanque = new Compte(0, 0, TypeCompte.Courant, 0);
                 Transaction t = new Transaction(0, DateTime.Now, montant, ComptePorteur.Id, compteBanque.Id);
+                CodeResultat codeResultat;
 
-                if (CartePorteur.EstRetraitAutoriseNiveauCarte(t, compteBanque, ComptePorteur) && ComptePorteur.EstRetraitValide(t))
+                if (((codeResultat = CartePorteur.EstRetraitAutoriseNiveauCarte(t, compteBanque, ComptePorteur)) == CodeResultat.transactionok) && ((codeResultat = ComptePorteur.EstRetraitValide(t)) == CodeResultat.transactionok))
                 {
                     SqlRequests.EffectuerModificationOperationSimple(t, CartePorteur.Id);
 
@@ -54,12 +65,12 @@ namespace Or.Pages
                 }
                 else
                 {
-                    MessageBox.Show("Opération de retrait non authorisée");
+                    MessageBox.Show(MessagesErreur.Label(codeResultat));
                 }
             }
             else
             {
-                MessageBox.Show("Montant invalide");
+                MessageBox.Show(MessagesErreur.Label(CodeResultat.montanttinvalide));
             }
         }
     }

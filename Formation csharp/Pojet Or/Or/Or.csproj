@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -64,6 +64,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Business\MessagesErreur.cs" />
+    <Compile Include="Business\TypeTransacConverter.cs" />
     <Compile Include="Business\EuroConverter.cs" />
     <Compile Include="Business\IsNegativeConverter.cs" />
     <Compile Include="Business\SqlRequests.cs" />
@@ -92,6 +94,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ListeBeneficiaires.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Retrait.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +112,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\SerialisationXML.cs" />
+    <Compile Include="Models\ExportCompte.cs" />
     <Compile Include="Models\Compte.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Pages\Accueil.xaml.cs">
@@ -123,6 +131,9 @@
     </Compile>
     <Compile Include="Pages\HistoriqueTransactions.xaml.cs">
       <DependentUpon>HistoriqueTransactions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ListeBeneficiaires.xaml.cs">
+      <DependentUpon>ListeBeneficiaires.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Retrait.xaml.cs">
       <DependentUpon>Retrait.xaml</DependentUpon>

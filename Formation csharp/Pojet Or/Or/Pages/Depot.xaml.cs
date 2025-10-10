@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Navigation;
+using static Or.Business.MessagesErreur;
+
 
 namespace Or.Pages
 {
@@ -40,7 +42,8 @@ namespace Or.Pages
 
                 Transaction t = new Transaction(0, DateTime.Now, montant,  compteBanque.Id, de.Id);
 
-                if (de.EstDepotValide(t))
+              
+                if (de.EstDepotValide(t) == CodeResultat.transactionok)
                 {
                     SqlRequests.EffectuerModificationOperationSimple(t, de.IdentifiantCarte);
 
@@ -48,12 +51,12 @@ namespace Or.Pages
                 }
                 else
                 {
-                    MessageBox.Show("Opération refusée");
+                    MessageBox.Show(MessagesErreur.Label(CodeResultat.montanttinvalide));
                 }
             }
             else
             {
-                MessageBox.Show("Montant invalide");
+                MessageBox.Show(MessagesErreur.Label(CodeResultat.montanttinvalide));
             }
         }
     }

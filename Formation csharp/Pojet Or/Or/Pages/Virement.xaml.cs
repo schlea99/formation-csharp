@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using static Or.Business.MessagesErreur;
 
 namespace Or.Pages
 {
@@ -28,7 +29,7 @@ namespace Or.Pages
             Montant.Text = 0M.ToString("C2");
 
             CartePorteur = SqlRequests.InfosCarte(numCarte);
-            CartePorteur.AlimenterHistoriqueEtListeComptes(SqlRequests.ListeTransactionsAssociesCarte(numCarte), SqlRequests.ListeComptesAssociesCarte(CartePorteur.Id).Select(x=>x.Id).ToList());
+            CartePorteur.AlimenterHistoriqueEtListeComptes(SqlRequests.ListeTransactionsAssociesCarte(numCarte), SqlRequests.ListeComptesAssociesCarte(CartePorteur.Id).Select(x => x.Id).ToList());
             ComptePorteur = SqlRequests.ListeComptesAssociesCarte(CartePorteur.Id).Find(x => x.TypeDuCompte == TypeCompte.Courant);
 
             var viewExpediteur = CollectionViewSource.GetDefaultView(SqlRequests.ListeComptesAssociesCarte(numCarte));
@@ -57,20 +58,21 @@ namespace Or.Pages
                 Compte de = Destinataire.SelectedItem as Compte;
 
                 Transaction t = new Transaction(0, DateTime.Now, montant, ex.Id, de.Id);
+                CodeResultat codeResultat;
 
-                if ((Expediteur.SelectedItem as Compte).EstRetraitValide(t) && CartePorteur.EstRetraitAutoriseNiveauCarte(t, ex, de))
+                if (((codeResultat = (Expediteur.SelectedItem as Compte).EstRetraitValide(t)) == CodeResultat.transactionok) && ((codeResultat = CartePorteur.EstRetraitAutoriseNiveauCarte(t, ex, de)) == CodeResultat.transactionok))
                 {
                     SqlRequests.EffectuerModificationOperationInterCompte(t, ex.IdentifiantCarte, de.IdentifiantCarte);
                     OnReturn(null);
                 }
                 else
                 {
-                    MessageBox.Show("Opération de virement non autorisé");
+                    MessageBox.Show(MessagesErreur.Label(codeResultat));
                 }
             }
             else
             {
-                MessageBox.Show("Montant invalide");
+                MessageBox.Show(MessagesErreur.Label(CodeResultat.montanttinvalide));
             }
 
         }
