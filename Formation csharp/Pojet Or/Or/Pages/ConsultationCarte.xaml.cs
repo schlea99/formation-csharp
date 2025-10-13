@@ -68,6 +68,8 @@ namespace Or.Pages
 
         }
 
+        private void ImportXML(object sender, RoutedEventArgs e)
+        { }
 
         void PageFunctionNavigate(PageFunction<long> page)
         {

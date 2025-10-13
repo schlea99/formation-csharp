@@ -45,7 +45,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Nom" Width="90">
+                    <GridViewColumn Header="Nom" Width="120">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -58,7 +58,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Prénom" Width="50">
+                    <GridViewColumn Header="Prénom" Width="120">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -71,7 +71,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="N° compte" Width="70">
+                    <GridViewColumn Header="N° compte" Width="150">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -84,7 +84,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Actions"  Width="60">
+                    <GridViewColumn Header="Actions"  Width="90">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

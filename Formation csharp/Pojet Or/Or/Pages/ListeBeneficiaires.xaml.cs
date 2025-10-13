@@ -24,13 +24,13 @@ namespace Or.Pages
 
     public partial class ListeBeneficiaire : PageFunction<long>
     {
-        private long Benefnumcarte { get; set; }
+        private long NumCarteBenef { get; set; }
 
         public ListeBeneficiaire(long numCarte)
         {
             InitializeComponent();
 
-            Benefnumcarte = numCarte;
+            NumCarteBenef = numCarte;
 
             Carte c = SqlRequests.InfosCarte(numCarte);
 
@@ -43,19 +43,24 @@ namespace Or.Pages
 
         private void Ajouter_Click(object sender, RoutedEventArgs e)
         {
-            PageFunctionNavigate(new AjoutBenef(Benefnumcarte));
+            PageFunctionNavigate(new AjoutBenef(NumCarteBenef));
         }
 
-        private void PageFunctionNavigate(AjoutBenef ajoutBenef)
-        {
-            throw new NotImplementedException();
-        }
 
         private void Supprimer_Click(object sender, RoutedEventArgs e)
         {
-            int idtCpt = (int)(sender as Button).CommandParameter;
-            SqlRequests.SupprimerBeneficiaire(Benefnumcarte, idtCpt);
-            listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(Benefnumcarte);
+            Beneficiaire benef = (sender as Button).DataContext as Beneficiaire;
+
+            try
+            {
+                SqlRequests.SupprimerBeneficiaire(benef.NumCarteBenef, benef.IdtCptBenef);
+                listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(NumCarteBenef);
+                MessageBox.Show("Bénéficiaire supprimé avec succès");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression du bénéficiaire : {ex.Message}");
+            }
         }
 
         private void Retour_Click(object sender, RoutedEventArgs e)

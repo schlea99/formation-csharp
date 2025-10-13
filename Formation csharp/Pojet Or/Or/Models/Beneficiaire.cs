@@ -12,7 +12,6 @@ namespace Or.Models
         public long NumCarteCompte { get; set; }
         // Identifiant compte bénéficiaire
         public int IdtCptBenef { get; set; }
-
         public long NumCarteBenef { get; set; }
         public string PrenomBenef { get; set; }
         public string NomBenef { get; set; }

@@ -25,21 +25,22 @@ namespace Or.Pages
     /// </summary>
     public partial class AjoutBenef : PageFunction<long>
     {
-        private long Benefnumcarte { get; set; }
+        private long NumCarteBenef { get; set; }
         public AjoutBenef(long numCarte)
         {
             InitializeComponent();
 
-            Benefnumcarte = numCarte;
+            NumCarteBenef = numCarte;
         }
 
         private void Ajouter_Click(object sender, RoutedEventArgs e)
         {
+
             if (int.TryParse(Numero.Text, out int idtCompte))
             {
                 if (SqlRequests.EstBeneficiairePotentiel(idtCompte))
                 {
-                    SqlRequests.AjouterBeneficiaire(Benefnumcarte, idtCompte);
+                    SqlRequests.AjouterBeneficiaire(NumCarteBenef, idtCompte);
                     OnReturn(null);
                 }
                 else
@@ -58,10 +59,7 @@ namespace Or.Pages
             OnReturn(null);
         }
 
-        private void OnReturn(object p)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
 

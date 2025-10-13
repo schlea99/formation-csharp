@@ -30,10 +30,10 @@ namespace Or.Business
         static readonly string queryUpdateCompte = "UPDATE COMPTE SET Solde=Solde-@Montant WHERE IdtCpt=@IdtCompte";
 
         static readonly string queryAjoutBenef = "INSERT INTO \"BENEFICIAIRES\" (NumCarteCompte, IdtCptBenef) VALUES (@NumCarteCompte, @IdtCptBenef)";
-        static readonly string querySupprBenef = "DELETE FORM \"BENEFICIAIRES\" WHERE NumCarteCompte=@NumCarteCompte AND IdtCptBenef=@IdtCptBenef";
+        static readonly string querySupprBenef = "DELETE FROM \"BENEFICIAIRES\" WHERE NumCarteClient=@NumCarteClient AND IdtCptBenef=@IdtCptBenef";
 
-        static readonly string queryListeBeneficiaire = "SELECT NumCarteClient, PrenomBenef, NomBenef, TypeDuCompte, IdtCptBenef FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ct ON ct.NumCarte = c.NumCarte WHERE c.NumCarte = @NumCarteCompte"; 
-         
+        static readonly string queryListeBeneficiaire = "SELECT NumCarteClient, PrenomBenef, NomBenef, TypeDuCompte, IdtCptBenef FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ct ON ct.NumCarte = c.NumCarte WHERE c.NumCarte = @NumCarteCompte";
+
         static readonly string queryBeneficiairePotentiel = "SELECT COUNT(0) FROM COMPTE WHERE IdtCpt = @IdtCompte";
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Or.Business
 
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open(); 
+                connection.Open();
 
                 using (var command = new SqliteCommand(queryListeBeneficiaire, connection))
                 {
@@ -561,12 +561,21 @@ namespace Or.Business
                 // Supprimer bénéficiaires
                 using (var suppr = new SqliteCommand(querySupprBenef, connection))
                 {
-                    suppr.Parameters.AddWithValue("@Numcarte", numcarteClient);
-                    suppr.Parameters.AddWithValue("@IdtCompte", idtCpt);
-                    suppr.ExecuteNonQuery();
+                    try
+                    {
+                        suppr.Parameters.AddWithValue("@NumCarteClient", numcarteClient);
+                        suppr.Parameters.AddWithValue("@IdtCptBenef", idtCpt);
+                        suppr.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Erreur : " + e.Message);
+                        Console.WriteLine("Pas de suppression");
+                    }
                 }
             }
         }
+
 
         public static bool EstBeneficiairePotentiel(int idtCpt)
         {

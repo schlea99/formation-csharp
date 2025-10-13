@@ -14,14 +14,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="183*" />
-            <RowDefinition Height="220*" />
+            <RowDefinition Height="127*" />
+            <RowDefinition Height="276*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="129*" />
+            <ColumnDefinition Width="31*" />
+            <ColumnDefinition Width="240*" />
         </Grid.ColumnDefinitions>
 
         <StackPanel Margin="10" Orientation="Vertical" Grid.Row="0" Grid.Column="0">
@@ -104,8 +104,15 @@
             <Button Content="Liste des Bénéficiaires"  Margin="0,0,0,8" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="GoBeneficiaire" />
         </StackPanel>
 
+        <Label x:Name="labelM" Content="Fichier à importer" HorizontalAlignment="Left" Margin="55,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,-0.27" Height="30" Width="250" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="Compte" HorizontalAlignment="Left" Margin="58,237,0,0" VerticalAlignment="Top" Width="170" Height="24" TextAlignment="Right" TextWrapping="Wrap" Grid.Row="2"/>
+
         <StackPanel Margin="10" Orientation="Vertical" Grid.Row="2" Grid.Column="2" >
-            <Button Content="Exporter Transactions" Margin=" 120,120,0,8" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ExportXML" />
+            <Button Content="Exporter Transactions" Margin=" 100,100,0,8" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ExportXML" />
+        </StackPanel>
+
+        <StackPanel Margin="10,23,10,10" Orientation="Vertical" Grid.Row="2" Grid.Column="2" >
+            <Button Content="Importer Transactions" Margin=" 100,150,0,8" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ImportXML" />
         </StackPanel>
 
 
