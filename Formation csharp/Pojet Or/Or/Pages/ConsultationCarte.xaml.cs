@@ -50,9 +50,8 @@ namespace Or.Pages
         // Projet or - partie 3 - bénéficiaire
         private void GoBeneficiaire(object sender, RoutedEventArgs e)
         {
-            
+            PageFunctionNavigate(new ListeBeneficiaire(long.Parse(Numero.Text)));
         }
-
 
         // Projet or - partie 2 : export xml
         private void ExportXML(object sender, RoutedEventArgs e)

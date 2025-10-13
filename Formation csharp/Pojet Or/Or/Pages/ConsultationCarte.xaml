@@ -14,8 +14,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="183*" />
+            <RowDefinition Height="220*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -34,7 +34,7 @@
             <TextBlock x:Name="Prenom"  Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Background="#FFD2D0D0" Height="20" FontSize="14"/>
 
         </StackPanel>
-        <ListView x:Name="listView" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" SizeChanged="ListView_SizeChanged">
+        <ListView x:Name="listView" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" SizeChanged="ListView_SizeChanged" Height="126" Width="428">
             <ListView.Resources>
                 <ec:EuroConverter x:Key="EuroConverter"/>
             </ListView.Resources>
@@ -107,7 +107,7 @@
         <StackPanel Margin="10" Orientation="Vertical" Grid.Row="2" Grid.Column="2" >
             <Button Content="Exporter Transactions" Margin=" 120,120,0,8" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="ExportXML" />
         </StackPanel>
-        
-        
+
+
     </Grid>
 </PageFunction>

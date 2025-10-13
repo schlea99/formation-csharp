@@ -29,13 +29,12 @@ namespace Or.Business
 
         static readonly string queryUpdateCompte = "UPDATE COMPTE SET Solde=Solde-@Montant WHERE IdtCpt=@IdtCompte";
 
-        static readonly string queryAjoutBenef = "INSERT INTO \"BENEFICIAIRES\" (NumCarte, PrenomClient, NomClient, IdtCompte, TypeCompte) VALUES (@NumCarte, @PrenomClient, @NomClient, @IdtCompte, @TypeCompte) WHERE IdCompte=@CptDest";
-        static readonly string querySupprBenef = "DELETE FORM \"BENEFICIAIRES\" WHERE NumCarte=@NumCarte && IdtCompte=@IdtCompte";
+        static readonly string queryAjoutBenef = "INSERT INTO \"BENEFICIAIRES\" (NumCarteCompte, IdtCptBenef) VALUES (@NumCarteCompte, @IdtCptBenef)";
+        static readonly string querySupprBenef = "DELETE FORM \"BENEFICIAIRES\" WHERE NumCarteCompte=@NumCarteCompte AND IdtCptBenef=@IdtCptBenef";
 
-        // TERMINER BENEFICIAIRES !!
-        static readonly string queryBeneficiaire = "SELECT NumCarte, PrenomClient, NomClient, IdtCompte, TypeCompte FROM BENEFICIAIRES WHERE ...." 
-           
-        static readonly string queryBeneficiairePotentiel = "SELECT ";
+        static readonly string queryListeBeneficiaire = "SELECT NumCarteClient, PrenomBenef, NomBenef, TypeDuCompte, IdtCptBenef FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ct ON ct.NumCarte = c.NumCarte WHERE c.NumCarte = @NumCarteCompte"; 
+         
+        static readonly string queryBeneficiairePotentiel = "SELECT COUNT(0) FROM COMPTE WHERE IdtCpt = @IdtCompte";
 
         /// <summary>
         /// Obtention des infos d'une carte
@@ -289,23 +288,23 @@ namespace Or.Business
         }
 
         // Projet Or - Partie 3 : Gestion des bénéficiaires
-        public static List<Compte> ListeBeneficiairesAssocieClient(long numCarte)
+        public static List<Beneficiaire> ListeBeneficiairesAssocieClient(long numCarte)
         {
-            List<Compte> beneficiaires = new List<Compte>();
+            List<Beneficiaire> beneficiaires = new List<Beneficiaire>();
 
             string connectionString = ConstructionConnexionString(fileDb);
 
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open();
+                connection.Open(); 
 
-                using (var command = new SqliteCommand(queryBeneficiaire, connection))
+                using (var command = new SqliteCommand(queryListeBeneficiaire, connection))
                 {
-                    command.Parameters.AddWithValue("@NumCarte", numCarte);                
+                    command.Parameters.AddWithValue("@NumCarteCompte", numCarte);
 
                     using (var reader = command.ExecuteReader())
                     {
-                        int numcarte;
+                        long numcarteClient;
                         string prenomClient;
                         string nomClient;
                         int idtCpt;
@@ -313,20 +312,30 @@ namespace Or.Business
 
                         while (reader.Read())
                         {
-                            numcarte = reader.GetInt32(0);
+                            numcarteClient = reader.GetInt64(0);
                             prenomClient = reader.GetString(1);
                             nomClient = reader.GetString(2);
                             idtCpt = reader.GetInt32(3);
                             type = reader.GetString(4);
 
-                            Compte benef = new Compte (idtCpt, numcarte, type == "Courant" ? TypeCompte.Courant : TypeCompte.Livret, 0);
-                            beneficiaires.Add(benef);
-                        }
-                    }
+                            Beneficiaire b = new Beneficiaire()
+                            {
+                                NumCarteCompte = numCarte,
+                                IdtCptBenef = idtCpt,
+                                NumCarteBenef = numcarteClient,
+                                PrenomBenef = prenomClient,
+                                NomBenef = nomClient,
+                                TypeDuCompte = type == "Courant" ? TypeCompte.Courant : TypeCompte.Livret
+                            };
 
+                            beneficiaires.Add(b);
+                        }
+                        return beneficiaires;
+
+                    }
                 }
+
             }
-            return beneficiaires;
         }
 
 
@@ -520,35 +529,62 @@ namespace Or.Business
 
 
         // Projet Or - Partie 3 : Gestion des beneficiaires
-        private static SqliteCommand AjouterBeneficiaire(SqliteConnection connection, long numCarte, int idtCpt)
+        public static void AjouterBeneficiaire(long numcarteClient, int idtCpt)
         {
-            // Ajouter bénéficiaires
-            var ajoutBenef = connection.CreateCommand();
-            ajoutBenef.CommandText = queryAjoutBenef;
+            string connectionString = ConstructionConnexionString(fileDb);
 
-            ajoutBenef.Parameters.AddWithValue("@Numcarte", numCarte);
-            ajoutBenef.Parameters.AddWithValue("@IdtCompte", idtCpt);
-            return ajoutBenef;
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Vérification bénficiaire potentiel
+
+
+                // Ajouter bénéficiaires
+                using (var ajout = new SqliteCommand(queryAjoutBenef, connection))
+                {
+                    ajout.Parameters.AddWithValue("@Numcarte", numcarteClient);
+                    ajout.Parameters.AddWithValue("@IdtCompte", idtCpt);
+                    ajout.ExecuteNonQuery();
+                }
+            }
         }
 
-        private static SqliteCommand SupprimerBeneficiaire(SqliteConnection connection, long numCarte, int idtCpt)
+        public static void SupprimerBeneficiaire(long numcarteClient, int idtCpt)
         {
-            // Supprimer bénéficiaires
-            var supprBenef = connection.CreateCommand();
-            supprBenef.CommandText = querySupprBenef;
+            string connectionString = ConstructionConnexionString(fileDb);
 
-            supprBenef.Parameters.AddWithValue("@Numcarte", numCarte);
-            supprBenef.Parameters.AddWithValue("@IdtCompte", idtCpt);
-            return supprBenef;
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Supprimer bénéficiaires
+                using (var suppr = new SqliteCommand(querySupprBenef, connection))
+                {
+                    suppr.Parameters.AddWithValue("@Numcarte", numcarteClient);
+                    suppr.Parameters.AddWithValue("@IdtCompte", idtCpt);
+                    suppr.ExecuteNonQuery();
+                }
+            }
         }
 
-        private static SqliteCommand EstBeneficiairePotentiel(SqliteConnection connection, int idtCpt)
+        public static bool EstBeneficiairePotentiel(int idtCpt)
         {
-            // Bénéficiaire potentiel ?
-            var estBenef = connection.CreateCommand();
-            estBenef.CommandText = queryBeneficiairePotentiel;
+            string connectionString = ConstructionConnexionString(fileDb);
 
-            return estBenef;
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Bénéficiaire potentiel ?
+                using (var estBenef = new SqliteCommand(queryBeneficiairePotentiel, connection))
+                {
+                    estBenef.Parameters.AddWithValue("@IdtCompte", idtCpt);
+                    int id = Convert.ToInt32(estBenef.ExecuteScalar());
+                    return id > 0;
+                }
+            }
+
         }
 
     }

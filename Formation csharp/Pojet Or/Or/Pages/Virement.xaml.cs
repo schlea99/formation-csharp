@@ -22,6 +22,8 @@ namespace Or.Pages
 
         Carte CartePorteur { get; set; }
         Compte ComptePorteur { get; set; }
+        public long Benefnumcarte { get; private set; }
+
         public Virement(long numCarte)
         {
             InitializeComponent();
@@ -49,6 +51,16 @@ namespace Or.Pages
         {
             OnReturn(null);
         }
+
+        private void Ajouter_Click(object sender, RoutedEventArgs e)
+        {
+            PageFunctionNavigate(new AjoutBenef(Benefnumcarte));
+        }
+
+        private void PageFunctionNavigate(AjoutBenef ajoutBenef)
+        {
+            throw new NotImplementedException();
+        } 
 
         private void ValiderVirement_Click(object sender, RoutedEventArgs e)
         {
