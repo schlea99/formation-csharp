@@ -24,13 +24,13 @@ namespace Or.Pages
 
     public partial class ListeBeneficiaire : PageFunction<long>
     {
-        private long NumCarteBenef { get; set; }
+        private long NumCarteClient { get; set; }
 
         public ListeBeneficiaire(long numCarte)
         {
             InitializeComponent();
 
-            NumCarteBenef = numCarte;
+            NumCarteClient = numCarte;
 
             Carte c = SqlRequests.InfosCarte(numCarte);
 
@@ -38,12 +38,12 @@ namespace Or.Pages
             Prenom.Text = c.PrenomClient;
             Nom.Text = c.NomClient;
 
-            listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(numCarte);
+            listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(NumCarteClient);
         }
 
         private void Ajouter_Click(object sender, RoutedEventArgs e)
-        {
-            PageFunctionNavigate(new AjoutBenef(NumCarteBenef));
+        {        
+            PageFunctionNavigate(new AjoutBenef(NumCarteClient));
         }
 
 
@@ -53,8 +53,8 @@ namespace Or.Pages
 
             try
             {
-                SqlRequests.SupprimerBeneficiaire(benef.NumCarteBenef, benef.IdtCptBenef);
-                listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(NumCarteBenef);
+                SqlRequests.SupprimerBeneficiaire(NumCarteClient, benef.IdtCptBenef);
+                listView.ItemsSource = SqlRequests.ListeBeneficiairesAssocieClient(NumCarteClient);
                 MessageBox.Show("Bénéficiaire supprimé avec succès");
             }
             catch (Exception ex)
@@ -85,9 +85,9 @@ namespace Or.Pages
             if (gridView != null)
             {
                 double totalWidth = listView.ActualWidth - SystemParameters.VerticalScrollBarWidth;
-                gridView.Columns[0].Width = totalWidth * 0.10; // 10%
-                gridView.Columns[1].Width = totalWidth * 0.30; // 40%
-                gridView.Columns[2].Width = totalWidth * 0.30; // 20%
+                gridView.Columns[0].Width = totalWidth * 0.25; // 10%
+                gridView.Columns[1].Width = totalWidth * 0.25; // 40%
+                gridView.Columns[2].Width = totalWidth * 0.20; // 20%
                 gridView.Columns[3].Width = totalWidth * 0.30; // 20%
             }
         }

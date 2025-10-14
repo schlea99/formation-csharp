@@ -45,7 +45,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Nom" Width="120">
+                    <GridViewColumn Header="Nom" Width="100">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -58,7 +58,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Prénom" Width="120">
+                    <GridViewColumn Header="Prénom" Width="100">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -71,14 +71,14 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="N° compte" Width="150">
+                    <GridViewColumn Header="N° compte" Width="60">
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Text="{Binding IdtCompte}"
+                                    <TextBlock Text="{Binding IdtCptBenef}"
                                                Style="{StaticResource TextColumnStyle}"
-                                               TextAlignment="Right" />
+                                               TextAlignment="Center" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -88,7 +88,7 @@
 
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Supprimer" Click="Supprimer_Click" CommandParameter="{Binding idtCpt}" />
+                                <Button Content="Supprimer" Click="Supprimer_Click" CommandParameter="{Binding IdtCptBenef}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

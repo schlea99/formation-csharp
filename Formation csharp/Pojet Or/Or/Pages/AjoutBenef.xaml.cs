@@ -25,7 +25,9 @@ namespace Or.Pages
     /// </summary>
     public partial class AjoutBenef : PageFunction<long>
     {
+        private long NumCarteClient { get; set; }
         private long NumCarteBenef { get; set; }
+ 
         public AjoutBenef(long numCarte)
         {
             InitializeComponent();
@@ -35,23 +37,49 @@ namespace Or.Pages
 
         private void Ajouter_Click(object sender, RoutedEventArgs e)
         {
-
-            if (int.TryParse(Numero.Text, out int idtCompte))
+            InitializeComponent();
+           
+            if (int.TryParse(Numero.Text, out int idCptBenef))
             {
-                if (SqlRequests.EstBeneficiairePotentiel(idtCompte))
+                if (SqlRequests.EstBeneficiairePotentiel(idCptBenef))
                 {
-                    SqlRequests.AjouterBeneficiaire(NumCarteBenef, idtCompte);
-                    OnReturn(null);
+                    List<Compte> comptes = SqlRequests.ListeComptesId(idCptBenef).ToList();
+                                                                                     
+                    foreach (Compte c in comptes)
+                    {
+                        if ((c.TypeDuCompte == TypeCompte.Courant) || (c.TypeDuCompte == TypeCompte.Livret && NumCarteBenef == c.IdentifiantCarte))
+                        {
+                            try
+                            {
+                                SqlRequests.AjouterBeneficiaire(NumCarteBenef, idCptBenef);
+                                MessageBox.Show("Bénéficiaire ajouté !");                               
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Erreur : " + ex.Message);
+                                MessageBox.Show("Erreur lors de l'ajout du bénéficiaire");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Impossible d'ajouter un livret exterieur en destinataire");
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Saisie bénéficiaire invalide");
+                    MessageBox.Show("Numéro compte incorrect");
+                    
                 }
             }
             else
             {
-                MessageBox.Show("Numéro compte incorrect");
+                MessageBox.Show("Saisie bénéficiaire invalide");
+                
             }
+
         }
 
         private void Retour_Click(object sender, RoutedEventArgs e)

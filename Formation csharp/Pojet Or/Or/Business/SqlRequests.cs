@@ -19,6 +19,9 @@ namespace Or.Business
         static readonly string queryComptesDispo = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE NOT IdtCpt=@IdtCpt";
 
         static readonly string queryComptesCarte = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE NumCarte=@Carte";
+     
+        static readonly string queryCompte = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE IdtCpt=@IdtCpt";
+
         static readonly string queryTransacCompte = "SELECT IdtTransaction, Horodatage, Montant, CptExpediteur, CptDestinataire, Statut FROM \"TRANSACTION\" WHERE Statut = 'O' AND (CptExpediteur=@IdtCptEx OR CptDestinataire=@IdtCptDest)";
         static readonly string queryCarte = "SELECT NumCarte, PrenomClient, NomClient, PlafondRetrait from CARTE WHERE NumCarte=@Carte";
         static readonly string queryTransacCarte = "SELECT tr.IdtTransaction, tr.Horodatage, tr.Montant, tr.CptExpediteur, tr.CptDestinataire, tr.Statut FROM \"TRANSACTION\" tr INNER JOIN HISTTRANSACTION t ON t.IdtTransaction = tr.IdtTransaction WHERE tr.Statut = 'O' AND t.NumCarte=@Carte;";
@@ -29,12 +32,12 @@ namespace Or.Business
 
         static readonly string queryUpdateCompte = "UPDATE COMPTE SET Solde=Solde-@Montant WHERE IdtCpt=@IdtCompte";
 
-        static readonly string queryAjoutBenef = "INSERT INTO \"BENEFICIAIRES\" (NumCarteCompte, IdtCptBenef) VALUES (@NumCarteCompte, @IdtCptBenef)";
-        static readonly string querySupprBenef = "DELETE FROM \"BENEFICIAIRES\" WHERE NumCarteClient=@NumCarteClient AND IdtCptBenef=@IdtCptBenef";
+        static readonly string queryAjoutBenef = "INSERT INTO \"BENEFICIAIRES\" (NumCarteClient, IdtCptBenef) VALUES (@numCarteClient, @idCompteBenef)";
+        static readonly string querySupprBenef = "DELETE FROM \"BENEFICIAIRES\" WHERE NumCarteClient = @numCarteClient AND IdtCptBenef = @idCompteBenef";
 
-        static readonly string queryListeBeneficiaire = "SELECT NumCarteClient, PrenomBenef, NomBenef, TypeDuCompte, IdtCptBenef FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ct ON ct.NumCarte = c.NumCarte WHERE c.NumCarte = @NumCarteCompte";
+        static readonly string queryListeBeneficiaire = "SELECT b.NumCarteClient, b.IdtCptBenef, ca.NumCarte AS NumCarteBenef, ca.NomClient AS NomBenef, ca.PrenomClient AS PrenomBenef, c.TypeCompte AS TypeDuCompte FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ca ON ca.NumCarte = c.NumCarte WHERE b.NumCarteClient = @numCarteClient";
 
-        static readonly string queryBeneficiairePotentiel = "SELECT COUNT(0) FROM COMPTE WHERE IdtCpt = @IdtCompte";
+        static readonly string queryBeneficiairePotentiel = "SELECT COUNT(*) FROM COMPTE c WHERE c.IdtCpt = @idCompte";
 
         /// <summary>
         /// Obtention des infos d'une carte
@@ -152,6 +155,42 @@ namespace Or.Business
             return comptes;
         }
 
+        public static List<Compte> ListeComptesId(int idtCpt)
+        {
+            List<Compte> comptes = new List<Compte>();
+
+            string connectionString = ConstructionConnexionString(fileDb);
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqliteCommand(queryCompte, connection))
+                {
+                    command.Parameters.AddWithValue("@IdtCpt", idtCpt);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        int idt;
+                        long carte;
+                        decimal solde;
+                        string typeCompte;
+
+                        while (reader.Read())
+                        {
+                            idt = reader.GetInt32(0);
+                            carte = reader.GetInt64(1);
+                            solde = reader.GetDecimal(2);
+                            typeCompte = reader.GetString(3);
+
+                            Compte compte = new Compte(idt, carte, typeCompte == "Courant" ? TypeCompte.Courant : TypeCompte.Livret, solde);
+                            comptes.Add(compte);
+                        }
+                    }
+                }
+            }
+            return comptes;
+        }
 
         /// <summary>
         /// Liste des comptes associés dispos
@@ -288,9 +327,10 @@ namespace Or.Business
         }
 
         // Projet Or - Partie 3 : Gestion des bénéficiaires
-        public static List<Beneficiaire> ListeBeneficiairesAssocieClient(long numCarte)
+        public static List<Beneficiaire> ListeBeneficiairesAssocieClient(long numCarteClient)
         {
-            List<Beneficiaire> beneficiaires = new List<Beneficiaire>();
+            // List<Beneficiaire> beneficiaires = new List<Beneficiaire>();
+            var beneficiaire = new List<Beneficiaire>();
 
             string connectionString = ConstructionConnexionString(fileDb);
 
@@ -300,42 +340,27 @@ namespace Or.Business
 
                 using (var command = new SqliteCommand(queryListeBeneficiaire, connection))
                 {
-                    command.Parameters.AddWithValue("@NumCarteCompte", numCarte);
+                    command.Parameters.AddWithValue("@numCarteClient", numCarteClient);
 
                     using (var reader = command.ExecuteReader())
                     {
-                        long numcarteClient;
-                        string prenomClient;
-                        string nomClient;
-                        int idtCpt;
-                        string type;
-
                         while (reader.Read())
                         {
-                            numcarteClient = reader.GetInt64(0);
-                            prenomClient = reader.GetString(1);
-                            nomClient = reader.GetString(2);
-                            idtCpt = reader.GetInt32(3);
-                            type = reader.GetString(4);
-
                             Beneficiaire b = new Beneficiaire()
                             {
-                                NumCarteCompte = numCarte,
-                                IdtCptBenef = idtCpt,
-                                NumCarteBenef = numcarteClient,
-                                PrenomBenef = prenomClient,
-                                NomBenef = nomClient,
-                                TypeDuCompte = type == "Courant" ? TypeCompte.Courant : TypeCompte.Livret
+                                NumCarteClient = reader.GetInt64(0),
+                                IdtCptBenef = reader.GetInt32(1),
+                                NumCarteBenef = reader.GetInt64(2),
+                                NomBenef = reader.GetString(3),
+                                PrenomBenef = reader.GetString(4),
+                                TypeDuCompte = reader.GetString(5) == "Courant" ? TypeCompte.Courant : TypeCompte.Livret
                             };
-
-                            beneficiaires.Add(b);
+                            beneficiaire.Add(b);
                         }
-                        return beneficiaires;
-
                     }
                 }
-
             }
+            return beneficiaire;
         }
 
 
@@ -529,7 +554,7 @@ namespace Or.Business
 
 
         // Projet Or - Partie 3 : Gestion des beneficiaires
-        public static void AjouterBeneficiaire(long numcarteClient, int idtCpt)
+        public static void AjouterBeneficiaire(long numCarteClient, int idCompteBenef)
         {
             string connectionString = ConstructionConnexionString(fileDb);
 
@@ -537,20 +562,17 @@ namespace Or.Business
             {
                 connection.Open();
 
-                // Vérification bénficiaire potentiel
-
-
                 // Ajouter bénéficiaires
                 using (var ajout = new SqliteCommand(queryAjoutBenef, connection))
                 {
-                    ajout.Parameters.AddWithValue("@Numcarte", numcarteClient);
-                    ajout.Parameters.AddWithValue("@IdtCompte", idtCpt);
+                    ajout.Parameters.AddWithValue("@numCarteClient", numCarteClient);
+                    ajout.Parameters.AddWithValue("@idCompteBenef", idCompteBenef);
                     ajout.ExecuteNonQuery();
                 }
             }
         }
 
-        public static void SupprimerBeneficiaire(long numcarteClient, int idtCpt)
+        public static void SupprimerBeneficiaire(long numCarteClient, int idCompteBenef)
         {
             string connectionString = ConstructionConnexionString(fileDb);
 
@@ -563,8 +585,8 @@ namespace Or.Business
                 {
                     try
                     {
-                        suppr.Parameters.AddWithValue("@NumCarteClient", numcarteClient);
-                        suppr.Parameters.AddWithValue("@IdtCptBenef", idtCpt);
+                        suppr.Parameters.AddWithValue("@numCarteClient", numCarteClient);
+                        suppr.Parameters.AddWithValue("@idCompteBenef", idCompteBenef);
                         suppr.ExecuteNonQuery();
                     }
                     catch (Exception e)
@@ -577,7 +599,7 @@ namespace Or.Business
         }
 
 
-        public static bool EstBeneficiairePotentiel(int idtCpt)
+        public static bool EstBeneficiairePotentiel(int idCompte)
         {
             string connectionString = ConstructionConnexionString(fileDb);
 
@@ -588,9 +610,9 @@ namespace Or.Business
                 // Bénéficiaire potentiel ?
                 using (var estBenef = new SqliteCommand(queryBeneficiairePotentiel, connection))
                 {
-                    estBenef.Parameters.AddWithValue("@IdtCompte", idtCpt);
-                    int id = Convert.ToInt32(estBenef.ExecuteScalar());
-                    return id > 0;
+                    estBenef.Parameters.AddWithValue("@idCompte", idCompte);
+                    var count = Convert.ToInt32(estBenef.ExecuteScalar());
+                    return count > 0;
                 }
             }
 

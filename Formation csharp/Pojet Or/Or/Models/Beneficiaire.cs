@@ -8,13 +8,16 @@ namespace Or.Models
 {
     public class Beneficiaire
     {
-        // Propriétaire du compte qui veut faire un virement à un bénéficiaire
-        public long NumCarteCompte { get; set; }
+        // Numéro de carte du propriétaire du compte qui veut faire un virement
+        public long NumCarteClient { get; set; }
+
         // Identifiant compte bénéficiaire
         public int IdtCptBenef { get; set; }
+        // Numéro carte bénéficiaire
         public long NumCarteBenef { get; set; }
         public string PrenomBenef { get; set; }
         public string NomBenef { get; set; }
+        // Type compte du compte bénéficiaire
         public TypeCompte TypeDuCompte { get; set; }
 
 
