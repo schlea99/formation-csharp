@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,11 @@ namespace Projet_argent
 {
     public class Banque
     {
+        // Bien les statics readonly
         public static readonly string CompteCourant = "Courant";
         public static readonly string CompteLivret = "Livret";
 
+        // Il aurait été plus simple d'utiliser des dictionnaires avec l'identifiant comme clef
         private List<Compte_bancaire> ComptesBancaires;
         private List<Carte_bancaire> CartesBancaires;
         public List<Transactions> Transactions { get; set; }
@@ -74,15 +77,18 @@ namespace Projet_argent
                         transac.Statut = "KO";
                     }
 
-                    Console.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
-                    Console.WriteLine($"Depot d'argent - Compte destinataire {transac.IdDestinataire}, solde : {stockDest.Solde}");
-                    Console.WriteLine($"Montant transaction : {transac.Montant}");
-                    Console.WriteLine();
+                    Debug.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
+                    Debug.WriteLine($"Depot d'argent - Compte destinataire {transac.IdDestinataire}, solde : {stockDest.Solde}");
+                    Debug.WriteLine($"Montant transaction : {transac.Montant}");
+                    Debug.WriteLine("");
                 }
 
+                // J'aurai plus utiliser 
+                
                 // Cas d'un retrait d'argent : expediteur compte connu vers destinataire environnement (0)
                 if (transac.IdDestinataire == 0 && (stockExp = ComptesBancaires.Find(cb => cb.Identifiant == transac.IdExpediteur)) != null)
                 {
+                    // Beaucoup de if imbriqués - peut-être refactoriser
                     if ((carteExp = CartesBancaires.Find(num => num.Numerocarte == stockExp.Numerocarte)) != null)
                     {
                         if ((PlafondExp = CartesBancaires.Find(p => p.Plafond >= transac.Montant && p.Numerocarte == stockExp.Numerocarte)) != null)
@@ -96,6 +102,7 @@ namespace Projet_argent
                             }
                             else
                             {
+                                // Tu reviens au sommet et tu ne renvoies pas KO ici
                                 continue;
                             }
                         }
@@ -106,13 +113,14 @@ namespace Projet_argent
                     }
                     else
                     {
+                        // Pourquoi tu écris KO vu que tu l'as mis comme valeur par défaut mais OK
                         transac.Statut = "KO";
                     }
 
-                    Console.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
-                    Console.WriteLine($"Retrait d'argent - Compte expéditeur {transac.IdExpediteur}, solde : {stockExp.Solde} ");
-                    Console.WriteLine($"Montant transaction : {transac.Montant}");
-                    Console.WriteLine();
+                    Debug.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
+                    Debug.WriteLine($"Retrait d'argent - Compte expéditeur {transac.IdExpediteur}, solde : {stockExp.Solde} ");
+                    Debug.WriteLine($"Montant transaction : {transac.Montant}");
+                    Debug.WriteLine("");
                 }
 
                 // Cas d'un virement ou d'un prélèvement : expediteur compte connu et destinataire compte connu
@@ -137,15 +145,14 @@ namespace Projet_argent
                                 {
                                     transac.Statut = "KO";
                                 }
-
                             }
                         }
                     }
-                    Console.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
-                    Console.WriteLine($"Compte expéditeur {transac.IdExpediteur}, solde : {stockExp.Solde} ");
-                    Console.WriteLine($"Compte destinataire {transac.IdDestinataire}, solde : {stockDest.Solde}");
-                    Console.WriteLine($"Montant transaction : {transac.Montant}");
-                    Console.WriteLine();
+                    Debug.WriteLine($"Transaction {transac.NumeroTransaction} : Statut {transac.Statut}");
+                    Debug.WriteLine($"Compte expéditeur {transac.IdExpediteur}, solde : {stockExp.Solde} ");
+                    Debug.WriteLine($"Compte destinataire {transac.IdDestinataire}, solde : {stockDest.Solde}");
+                    Debug.WriteLine($"Montant transaction : {transac.Montant}");
+                    Debug.WriteLine("");
 
                 }
 

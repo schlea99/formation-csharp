@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projet_argent
 {
@@ -39,6 +36,7 @@ namespace Projet_argent
 
             foreach (var num in Historique)
             {
+                // Bien
                 if (num.Horodatage >= debutcomptage && num.Horodatage <= horodatage && num.IdExpediteur != 0 && !ComptesAssocies.Contains(num.IdDestinataire))
                 {
                     somme += num.Montant;

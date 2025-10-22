@@ -2,14 +2,14 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projet_argent
 {
     public class Lecture_fichiers
     {
+        public static readonly int LongueurValideNumeroCarte = 16;
+
+        // Bonne chose de passer le chemin en paramètre
         public static List<Compte_bancaire> LireCompte(string cheminfichier)
         {
             List<Compte_bancaire> ComptesBancaires = new List<Compte_bancaire>();
@@ -47,7 +47,7 @@ namespace Projet_argent
                     decimal solde = 0;
 
                     bool successSolde = decimal.TryParse(champs[3], NumberStyles.AllowCurrencySymbol, CultureInfo.CreateSpecificCulture("fr-FR"), out solde);
-
+                    // Tu ne vérifies pas que le solde est supérieur ou égal à 0. 
                     if (successSolde)
                     {
                         //Console.WriteLine($"Conversion {champs[3]} en {solde}");
@@ -69,6 +69,7 @@ namespace Projet_argent
                     // solde : entier (le '.' en décimal est vérifié dans le try.parse)
                     // type : soit courant, soit livret                  
 
+                    // Bien, tu vérifies l'unicité ! 
                     if (identifiant >= 0 && !Id_Use.Contains(identifiant))
                     {
                         if (type == Banque.CompteCourant || type == Banque.CompteLivret)
@@ -132,8 +133,9 @@ namespace Projet_argent
                     // numéro de carte : entier positif à 16 chiffres et unique 
                     // plafond : entre 500 et 3000 
 
-                    if (numerocarte.Length == 16 && !Num_Use.Contains(numerocarte))
+                    if (numerocarte.Length == LongueurValideNumeroCarte && !Num_Use.Contains(numerocarte))
                     {
+                        // Bien 
                         if (500 <= plafond && plafond <= 3000)
                         {
                             CartesBancaires.Add(new Carte_bancaire(numerocarte, plafond));
@@ -251,7 +253,8 @@ namespace Projet_argent
                     {
                         if (iddestinataire >= 0 && idexpediteur >= 0)
                         {
-                            if (montant >= 0)
+                            // On accepte pas les montants nuls
+                            if (montant > 0)
                             {
                                 Transactions.Add(new Transactions(numerotransaction, horodatage, montant, idexpediteur, iddestinataire, statut));
                                 Transac_Use.Add(numerotransaction);
