@@ -2,12 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Navigation;
 using System.Xml.Serialization;
-using Or.Models;
 
 
 namespace Or.Models
@@ -26,6 +21,7 @@ namespace Or.Models
             // On récupère les transactions associés au compte 
             // List<Transaction> transacCompte = SqlRequests.ListeTransactionsAssociesCompte(idtCpt);
 
+            ExportComptes exportComptes = new ExportComptes();
             List<ExportCompte> compteExport = new List<ExportCompte>();
             foreach (var c in comptes)
             {
@@ -45,7 +41,7 @@ namespace Or.Models
                         {
                             IdTransaction = t.IdTransaction,
                             Horodatage = t.Horodatage.ToString("dd/MM/yyyy HH:mm:ss"),
-                            Type = Tools.TypeTransaction(t.Expediteur, t.Destinataire).ToString(),
+                            Type = Tools.TypeTransacConverter(Tools.TypeTransaction(t.Expediteur, t.Destinataire)).ToString(),
                             Expediteur = t.Expediteur != 0 ? t.Expediteur.ToString() : null,
                             Destinataire = t.Destinataire != 0 ? t.Destinataire.ToString() : null,
                             Montant = t.Montant.ToString("C2")
@@ -56,12 +52,13 @@ namespace Or.Models
                 compteExport.Add(export);
             }
 
+            exportComptes.ListeComptes = compteExport;
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<ExportCompte>));
+            XmlSerializer serializer = new XmlSerializer(typeof(ExportComptes));
 
             using (TextWriter stream = new StreamWriter(nomFichier))
             {
-                serializer.Serialize(stream, compteExport);
+                serializer.Serialize(stream, exportComptes);
                 stream.Close();
             }
 

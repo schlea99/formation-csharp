@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Xml.Serialization;
 
 
 namespace Or.Models
 {
+    [XmlType("Comptes")]
+    public class ExportComptes
+    {
+        [XmlElement("Compte")]
+        public List<ExportCompte> ListeComptes = new List<ExportCompte>();
+    }
+
     // Projet Or - Partie 2 : Sérialisation XML
-    [XmlRoot("Compte")]
+    [XmlType("Compte")]
     public class ExportCompte
     {
         [XmlElement("Identifiant")]
