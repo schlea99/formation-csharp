@@ -41,6 +41,10 @@ namespace Or.Business
 
         static readonly string queryConseiller = "SELECT IdConseiller, NomConseiller, PrenomConseiller, EmailConseiller, TelConseiller FROM CONSEILLER INNER JOIN CARTE ca ON ca.IdConseiller = IdConseiller WHERE ca.NumCarte = @NumCarte";
 
+        static readonly string queryCreerClient = "INSERT INTO CARTE (NumCarte, PrenomClient, NomClient, PlafondRetrait, IdConseiller) VALUES (@NumCarte, @Prenom, @Nom, @Plafond, @IdConseiller)"; // commande sql pour récupérer le numéro de carte de la ligne que l'on a crée dans la table CARTE
+
+        static readonly string queryCreerCompte = "INSERT INTO COMPTE (NumCarte, Solde, TypeCompte) VALUES (@NumCarte, @Solde, @TypeCompte); SELECT last_insert_rowid();";
+
 
         // Elements ajoutés : on récupère le conseiller bancaire associé à la carte
         public static Conseiller ConseillerAssocieCarte(long numCarte)
@@ -61,7 +65,7 @@ namespace Or.Business
                     {
                         if (reader.Read())
                         {
-                            conseiller = new Conseiller()
+                            conseiller = new Conseiller
                             {
                                 IdConseiller = reader.GetInt32(0),
                                 NomConseiller = reader.GetString(1),
@@ -75,6 +79,62 @@ namespace Or.Business
             }
             return conseiller;
         }
+
+        private static long GenererNumCarte()
+        {
+            Random numca = new Random();
+            string numCarte = "";
+
+            for (int i = 0; i < 16; i++)
+                numCarte += numca.Next(0, 10).ToString();
+
+            return long.Parse(numCarte);
+        }
+
+
+
+        // Elements ajoutés : on crée un nouveau client, on crée d'abord une carte (numéro aléatoire) puis on lui associe un compte courant  
+        public static long CreerClient(string prenom, string nom, int plafondMax, int idconseiller, int idCompte)
+        {
+            // On génère d'abord le numéro de carte aléatoirement 
+            long numCarte = GenererNumCarte();
+
+            string connectionString = ConstructionConnexionString(fileDb);
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var client = connection.BeginTransaction())
+                {
+                    // Créer la carte
+                    using (var command = new SqliteCommand(queryCreerClient, connection))
+                    {
+                        command.Parameters.AddWithValue("@NumCarte", numCarte);
+                        command.Parameters.AddWithValue("@Prenom", prenom);
+                        command.Parameters.AddWithValue("@Nom", nom);
+                        command.Parameters.AddWithValue("@Plafond", plafondMax);
+                        command.Parameters.AddWithValue("@IdConseiller", idconseiller);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Créer le compte courant associé à la carte que l'on vient de créer
+                    using (var commandcompte = new SqliteCommand(queryCreerCompte, connection))
+                    {
+                        commandcompte.Parameters.AddWithValue("@NumCarte", numCarte);
+                        commandcompte.Parameters.AddWithValue("@TypeCompte", TypeCompte.Courant.ToString());
+                        commandcompte.Parameters.AddWithValue("@Solde", 0M);
+
+                        idCompte = Convert.ToInt32(commandcompte.ExecuteScalar());
+                    }
+
+                    client.Commit();
+                }
+            }
+            return numCarte;
+        }
+
 
 
         /// <summary>

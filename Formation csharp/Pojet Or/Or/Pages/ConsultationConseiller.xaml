@@ -14,21 +14,7 @@
 
     <Grid Margin="0,0,0,10">
 
-        <TextBlock x:Name="Titre"  TextWrapping="Wrap" Text="Informations sur mon conseiller bancaire" FontSize="20" FontWeight="SemiBold" Margin="166,9,145,154" Grid.Row="1" RenderTransformOrigin="0.5,0.5" >
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleY="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
-
-
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -39,23 +25,18 @@
             <ColumnDefinition Width="Auto"  />
         </Grid.ColumnDefinitions>
 
+        <TextBlock x:Name="Titre"  TextWrapping="Wrap" Text="Informations sur mon conseiller bancaire" FontSize="20" FontWeight="SemiBold" Margin="189,27,153,26" RenderTransformOrigin="0.5,0.5" />
 
-
-        <StackPanel Margin="177,35,-148,-61" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Height="231" Grid.Row="2" Width="661" Grid.ColumnSpan="2">
-            <TextBlock Text="Nom :"     Margin="0,0,267,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="20" FontSize="14" Grid.Row="0" Grid.Column="0"/>
+        <StackPanel Margin="133,0,97,-22" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Height="231" Grid.Row="1" Width="484">
             <TextBlock x:Name="Nom"     Margin="0,0,155,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="26" FontSize="14" Grid.Row="0" Grid.Column="1"/>
-            <TextBlock Text="Prenom :"     Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="20" FontSize="14" Grid.Row="2" Grid.Column="0"/>
             <TextBlock x:Name="Prenom"  Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch"  Height="20" FontSize="14" Grid.Row="2" Grid.Column="1"/>
-            <TextBlock Text="Email :"     Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="20" FontSize="14" Grid.Row="2" Grid.Column="0"/>
             <TextBlock x:Name="Email"  Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="20" FontSize="14" Grid.Row="2" Grid.Column="1"/>
-            <TextBlock Text="Telephone :"     Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch" Height="20" FontSize="14" Grid.Row="2" Grid.Column="0"/>
             <TextBlock x:Name="Telephone"  Margin="0,0,0,8" HorizontalAlignment="Stretch"  TextWrapping="Wrap" VerticalAlignment="Stretch"  Height="20" FontSize="14"/>
         </StackPanel>
 
-        <StackPanel Margin="10,124,534,9" Orientation="Vertical" Grid.Row="2" Grid.Column="0" >
+        <StackPanel Margin="134,213,411,-80" Orientation="Vertical" Grid.Row="2" Grid.Column="0" >
             <Button x:Name="Retour" Content="Retour" Margin="0,0,0,10" VerticalAlignment="Stretch" HorizontalAlignment="Left" Click="Retour_Click" Height="30" Width="140"/>
         </StackPanel>
-
 
     </Grid>
 

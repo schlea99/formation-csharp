@@ -44,6 +44,27 @@ namespace Or.Pages
             }
         }
 
+        public void CreerNouveauClient(object sender, RoutedEventArgs e)
+        {
+            string prenom = Prenom.Text;
+            string nom = Nom.Text;
+            int plafondMax = int.Parse(Plafond.Text);
+            int idconseiller = int.Parse(IdConseiller.Text);
+
+            try
+            {
+                var creation = SqlRequests.CreerClient(prenom, nom, plafondMax, idconseiller, idcompte);
+                MessageBox.Show($"Compte crée ! Numéro de carte : {creation.numCarte} et compte courant : {idcompte}");
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                BBBB
+            }
+        }
+
+
         public void GoMouse(object sender, RoutedEvent e)
         {
 

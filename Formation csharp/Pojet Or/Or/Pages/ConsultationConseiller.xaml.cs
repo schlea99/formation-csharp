@@ -21,11 +21,12 @@ namespace Or.Pages
 
             if (c != null)
             {
-                Nom.Text = c.NomConseiller;
-                Prenom.Text = c.PrenomConseiller;
-                Email.Text = c.EmailConseiller;
-                Telephone.Text = c.TelConseiller;
+                Nom.Text = "Nom : " + c.NomConseiller;
+                Prenom.Text = "Prénom : " + c.PrenomConseiller;
+                Email.Text = "Email : " + c.EmailConseiller;
+                Telephone.Text = "Téléphone : " + c.TelConseiller;
             }
+
             else
             {
                 MessageBox.Show("Aucun conseiller associé à la carte", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
