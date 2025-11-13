@@ -46,6 +46,7 @@ namespace Or.Models
                             Destinataire = t.Destinataire != 0 ? t.Destinataire.ToString() : null,
                             Montant = t.Montant.ToString("C2")
                         };
+
                         export.Historique.Add(exportTransactions);
                     }
                 }
@@ -63,5 +64,6 @@ namespace Or.Models
             }
 
         }
+
     }
 }

@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Or.Business;
 using Or.Models;
+using Or.Pages;
+
 
 namespace Or.Pages
 {
@@ -16,6 +18,11 @@ namespace Or.Pages
             InitializeComponent();
             Carte c = SqlRequests.InfosCarte(numCarte);
 
+            //if (c == null)
+            //{
+            //    MessageBox.Show("Numéro de carte non présent dans la base de données", "Carte inexistante", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+            
             Numero.Text = c.Id.ToString();
             Prenom.Text = c.PrenomClient;
             Nom.Text = c.NomClient;
@@ -51,6 +58,12 @@ namespace Or.Pages
         private void GoBeneficiaire(object sender, RoutedEventArgs e)
         {
             PageFunctionNavigate(new ListeBeneficiaire(long.Parse(Numero.Text)));
+        }
+
+        // Ajout informations du conseiller bancaire
+        private void GoInfoConseiller(object sender, RoutedEventArgs e)
+        {
+            PageFunctionNavigate(new ConsultationConseiller(long.Parse(Numero.Text)));
         }
 
         // Projet or - partie 2 : export xml

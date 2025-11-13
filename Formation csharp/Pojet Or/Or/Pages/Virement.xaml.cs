@@ -76,7 +76,20 @@ namespace Or.Pages
 
         private void ValiderVirement_Click(object sender, RoutedEventArgs e)
         {
-            if (decimal.TryParse(Montant.Text.Replace(".", ",").Trim(new char[] { '€', ' ' }), out decimal montant))
+            // Debug lorsque les comptes destinataire et/ou expéditeur ne sont pas sélectionnés 
+            if (Expediteur.SelectedItem == null)
+            {
+                MessageBox.Show("Il faut sélectionner un compte expediteur", "Erreur de saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (Destinataire.SelectedItem == null)
+            {
+                MessageBox.Show("Il faut sélectionner un compte destinataire", "Erreur de saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (decimal.TryParse(Montant.Text.Replace(".", ",").Trim(new char[] { '€', ' ' }), out decimal montant) && montant > 0)
             {
                 Compte ex = Expediteur.SelectedItem as Compte;
                 Compte de = Destinataire.SelectedItem as Compte;

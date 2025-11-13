@@ -19,7 +19,7 @@ namespace Or.Business
         static readonly string queryComptesDispo = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE NOT IdtCpt=@IdtCpt";
 
         static readonly string queryComptesCarte = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE NumCarte=@Carte";
-     
+
         static readonly string queryCompte = "SELECT IdtCpt, NumCarte, Solde, TypeCompte FROM COMPTE WHERE IdtCpt=@IdtCpt";
 
         static readonly string queryTransacCompte = "SELECT IdtTransaction, Horodatage, Montant, CptExpediteur, CptDestinataire, Statut FROM \"TRANSACTION\" WHERE Statut = 'O' AND (CptExpediteur=@IdtCptEx OR CptDestinataire=@IdtCptDest)";
@@ -38,6 +38,44 @@ namespace Or.Business
         static readonly string queryListeBeneficiaire = "SELECT b.NumCarteClient, b.IdtCptBenef, ca.NumCarte AS NumCarteBenef, ca.NomClient AS NomBenef, ca.PrenomClient AS PrenomBenef, c.TypeCompte AS TypeDuCompte FROM BENEFICIAIRES b INNER JOIN COMPTE c ON c.IdtCpt = b.IdtCptBenef INNER JOIN CARTE ca ON ca.NumCarte = c.NumCarte WHERE b.NumCarteClient = @numCarteClient";
 
         static readonly string queryBeneficiairePotentiel = "SELECT COUNT(*) FROM COMPTE c WHERE c.IdtCpt = @idCompte";
+
+        static readonly string queryConseiller = "SELECT IdConseiller, NomConseiller, PrenomConseiller, EmailConseiller, TelConseiller FROM CONSEILLER INNER JOIN CARTE ca ON ca.IdConseiller = IdConseiller WHERE ca.NumCarte = @NumCarte";
+
+
+        // Elements ajoutés : on récupère le conseiller bancaire associé à la carte
+        public static Conseiller ConseillerAssocieCarte(long numCarte)
+        {
+            Conseiller conseiller = null;
+
+            string connectionString = ConstructionConnexionString(fileDb);
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var command = new SqliteCommand(queryConseiller, connection))
+                {
+                    command.Parameters.AddWithValue("@NumCarte", numCarte);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            conseiller = new Conseiller()
+                            {
+                                IdConseiller = reader.GetInt32(0),
+                                NomConseiller = reader.GetString(1),
+                                PrenomConseiller = reader.GetString(2),
+                                EmailConseiller = reader.GetString(3),
+                                TelConseiller = reader.GetString(4)
+                            };
+                        }
+                    }
+                }
+            }
+            return conseiller;
+        }
+
 
         /// <summary>
         /// Obtention des infos d'une carte

@@ -36,13 +36,21 @@ namespace Or.Pages
         {
             if (decimal.TryParse(Montant.Text.Replace(".", ",").Trim(new char[] { '€', ' ' }), out decimal montant) && montant > 0)
             {
-                //Compte fictif pour permettre la transaction
+                // Debug lorsque le compte destinataire n'est pas sélectionné lors d'un dépot d'argent 
+                if (Destinataire.SelectedItem == null)
+                {
+                    MessageBox.Show("Il faut sélectionner un compte destinataire", "Erreur de saisie", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Compte fictif pour permettre la transaction
                 Compte compteBanque = new Compte(0, 0, TypeCompte.Courant, 0);
                 Compte de = Destinataire.SelectedItem as Compte;
 
+                // Création de la transaction de dépôt 
                 Transaction t = new Transaction(0, DateTime.Now, montant,  compteBanque.Id, de.Id);
 
-              
+                // On vérifie que le dépôt est valide 
                 if (de.EstDepotValide(t) == CodeResultat.transactionok)
                 {
                     SqlRequests.EffectuerModificationOperationSimple(t, de.IdentifiantCarte);

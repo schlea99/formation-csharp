@@ -102,6 +102,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ConsultationConseiller.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Retrait.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Beneficiaire.cs" />
+    <Compile Include="Models\Conseiller.cs" />
     <Compile Include="Models\SerialisationXML.cs" />
     <Compile Include="Models\ExportCompte.cs" />
     <Compile Include="Models\Compte.cs" />
@@ -142,6 +147,9 @@
     </Compile>
     <Compile Include="Pages\AjoutBenef.xaml.cs">
       <DependentUpon>AjoutBenef.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ConsultationConseiller.xaml.cs">
+      <DependentUpon>ConsultationConseiller.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Retrait.xaml.cs">
       <DependentUpon>Retrait.xaml</DependentUpon>
